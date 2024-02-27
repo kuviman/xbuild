@@ -58,6 +58,18 @@ pub fn build(env: &BuildEnv, out: &Path) -> Result<()> {
     let config = env.config().android();
     let mut manifest = config.manifest.clone();
 
+    let assets_src_dirs = {
+        let mut s = "[".to_owned();
+        for (i, asset) in config.assets.iter().enumerate() {
+            if i != 0 {
+                s.push_str(", ");
+            }
+            let path = env.cargo.package_root().join(asset.path());
+            s.push_str(path.to_str().unwrap());
+        }
+        s.push(']');
+        s
+    };
     let package = manifest.package.take().unwrap_or_default();
     let target_sdk = manifest.sdk.target_sdk_version.take().unwrap();
     let min_sdk = manifest.sdk.min_sdk_version.take().unwrap();
@@ -101,7 +113,7 @@ pub fn build(env: &BuildEnv, out: &Path) -> Result<()> {
                 }}
                 sourceSets {{
                     main {{
-                        assets.srcDirs = ['../../../../../../assets']
+                        assets.srcDirs = {assets_src_dirs}
                     }}
                 }}
                 externalNativeBuild {{
@@ -114,6 +126,7 @@ pub fn build(env: &BuildEnv, out: &Path) -> Result<()> {
                 {dependencies}
             }}
         "#,
+        assets_src_dirs = assets_src_dirs,
         package = package,
         target_sdk = target_sdk,
         min_sdk = min_sdk,
