@@ -92,6 +92,8 @@ pub struct Activity {
     pub config_changes: Option<String>,
     #[serde(rename(serialize = "android:label"))]
     pub label: Option<String>,
+    #[serde(rename(serialize = "android:theme"))]
+    pub theme: Option<String>,
     #[serde(rename(serialize = "android:launchMode"))]
     pub launch_mode: Option<String>,
     #[serde(rename(serialize = "android:name"))]
