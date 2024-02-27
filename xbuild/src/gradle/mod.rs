@@ -65,7 +65,7 @@ pub fn build(env: &BuildEnv, out: &Path) -> Result<()> {
                 s.push_str(", ");
             }
             let path = env.cargo.package_root().join(asset.path());
-            s.push_str(path.to_str().unwrap());
+            s.push_str(&format!("{:?}", path.to_str().unwrap()));
         }
         s.push(']');
         s
